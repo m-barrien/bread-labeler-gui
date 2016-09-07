@@ -7,7 +7,9 @@ from os.path import isfile, join
 class Application(tk.Frame):
 	def __init__(self, master=None):
 		super().__init__(master)
-
+		"""Fixed window size"""
+		master.minsize(width=600, height=600)
+		master.maxsize(width=600, height=600)
 		self.pack()
 		self.create_widgets()
 
