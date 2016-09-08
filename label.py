@@ -92,7 +92,19 @@ class ImageDataset(object):
 		img= Image.open(full_path)
 		img= img.resize((size, size), Image.ANTIALIAS)
 		return img
-			
+	def classify_full(self,full_path):
+		filename = full_path.split('/')[-1]
+		os.rename(full_path, out_path + "full/" + filename)
+	def classify_empty(self,full_path):
+		filename = full_path.split('/')[-1]
+		os.rename(full_path, out_path + "empty/" + filename)
+	def classify_covered(self,full_path):
+		filename = full_path.split('/')[-1]
+		os.rename(full_path, out_path + "covered/" + filename)
+	def classify_unknown(self,full_path):
+		filename = full_path.split('/')[-1]
+		os.rename(full_path, out_path + "unknown/" + filename)
+
 imgManager=ImageDataset()
 root = tk.Tk()
 app = Application(master=root)
