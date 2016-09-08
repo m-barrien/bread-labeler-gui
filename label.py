@@ -1,7 +1,7 @@
 #Python 3
 import tkinter as tk
 from PIL import Image, ImageTk
-from os import listdir
+from os import listdir, rename
 from os.path import isfile, join
 
 class Application(tk.Frame):
@@ -10,6 +10,7 @@ class Application(tk.Frame):
 		"""Fixed window size"""
 		master.minsize(width=630, height=300)
 		master.maxsize(width=630, height=300)
+		master.title("Bread bin classifier")
 
 		self.img_list=[]
 		self.img_frame = tk.Frame(self)
@@ -19,6 +20,7 @@ class Application(tk.Frame):
 		self.create_widgets()
 
 		[self.append_img() for i in range(5)]
+		self.destroy_img()
 
 	def create_widgets(self):
 		img_frame = tk.Frame(self,width=630, height=200, bg="white", colormap="new")
@@ -27,22 +29,22 @@ class Application(tk.Frame):
 
 		btn_frame = tk.Frame(self,width=630, height=100, bg="white", colormap="new")
 
-		self.btn_class_empty = tk.Button(btn_frame, width=10)
+		self.btn_class_empty = tk.Button(btn_frame, width=17, height=8)
 		self.btn_class_empty["text"] = "Empty"
 		self.btn_class_empty["command"] = self.append_img
 		self.btn_class_empty.pack(side="left", padx=2, pady=2)
 
-		self.btn_class_full = tk.Button(btn_frame, width=10)
+		self.btn_class_full = tk.Button(btn_frame, width=17, height=8)
 		self.btn_class_full["text"] = "Full"
-		self.btn_class_full["command"] = self.append_img
+		self.btn_class_full["command"] = self.classify_full
 		self.btn_class_full.pack(side="left", padx=2, pady=2)
 
-		self.btn_class_covered = tk.Button(btn_frame, width=10)
+		self.btn_class_covered = tk.Button(btn_frame, width=17, height=8)
 		self.btn_class_covered["text"] = "Covered"
 		self.btn_class_covered["command"] = self.destroy_img
 		self.btn_class_covered.pack(side="left", padx=2, pady=2)
 
-		self.btn_class_covered = tk.Button(btn_frame, width=10)
+		self.btn_class_covered = tk.Button(btn_frame, width=17, height=8)
 		self.btn_class_covered["text"] = "???"
 		self.btn_class_covered["command"] = self.destroy_img
 		self.btn_class_covered.pack(side="left", padx=2, pady=2)
@@ -74,6 +76,11 @@ class Application(tk.Frame):
 
 		self.append_img()
 
+	def classify_full(self):
+		label,img_path = self.img_list[0]
+		imgManager.classify_full(img_path)
+		self.destroy_img()
+
 class ImageDataset(object):
 	"""docstring for ImageDataset"""
 	"""Images path"""
@@ -94,16 +101,16 @@ class ImageDataset(object):
 		return img
 	def classify_full(self,full_path):
 		filename = full_path.split('/')[-1]
-		os.rename(full_path, out_path + "full/" + filename)
+		rename(full_path, self.out_path + "full/" + filename)
 	def classify_empty(self,full_path):
 		filename = full_path.split('/')[-1]
-		os.rename(full_path, out_path + "empty/" + filename)
+		rename(full_path, self.out_path + "empty/" + filename)
 	def classify_covered(self,full_path):
 		filename = full_path.split('/')[-1]
-		os.rename(full_path, out_path + "covered/" + filename)
+		rename(full_path, self.out_path + "covered/" + filename)
 	def classify_unknown(self,full_path):
 		filename = full_path.split('/')[-1]
-		os.rename(full_path, out_path + "unknown/" + filename)
+		rename(full_path, self.out_path + "unknown/" + filename)
 
 imgManager=ImageDataset()
 root = tk.Tk()
