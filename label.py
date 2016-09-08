@@ -8,19 +8,24 @@ class Application(tk.Frame):
 	def __init__(self, master=None):
 		super().__init__(master)
 		"""Fixed window size"""
-		master.minsize(width=600, height=300)
-		master.maxsize(width=600, height=300)
+		master.minsize(width=630, height=300)
+		master.maxsize(width=630, height=300)
+
 		self.img_list=[]
+		self.img_frame = tk.Frame(self)
+		self.btn_frame = tk.Frame(self)
+
 		self.pack(fill="both")
 		self.create_widgets()
 
 		[self.append_img() for i in range(5)]
 
 	def create_widgets(self):
-		self.img_frame = tk.Frame(self,width=600, height=200, bg="white", colormap="new")
-		self.img_frame.pack(side="top",fill="both")
+		img_frame = tk.Frame(self,width=630, height=200, bg="white", colormap="new")
+		img_frame.pack(side="top",fill="both")
+		self.img_frame=img_frame
 
-		btn_frame = tk.Frame(self,width=600, height=100, bg="white", colormap="new")
+		btn_frame = tk.Frame(self,width=630, height=100, bg="white", colormap="new")
 
 		self.btn_class_empty = tk.Button(btn_frame, width=10)
 		self.btn_class_empty["text"] = "Empty"
@@ -54,15 +59,13 @@ class Application(tk.Frame):
 		label.pack_forget()
 		#resize second place img to first place
 		label,img_path = self.img_list[0]
+		
 		image = imgManager.get_img_path(img_path,200)
 		photo = ImageTk.PhotoImage(image)
-		
-		label.config(height=200, width=200)
-		label.image=photo
-		
-		label.pack()
 
-
+		label.config(height=200, width=200,image=photo)
+		label.image = photo # keep a reference!
+		label.pack(side="left")
 
 class ImageDataset(object):
 	"""docstring for ImageDataset"""
