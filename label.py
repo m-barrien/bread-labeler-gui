@@ -42,6 +42,11 @@ class Application(tk.Frame):
 		self.btn_class_covered["command"] = self.destroy_img
 		self.btn_class_covered.pack(side="left", padx=2, pady=2)
 
+		self.btn_class_covered = tk.Button(btn_frame, width=10)
+		self.btn_class_covered["text"] = "???"
+		self.btn_class_covered["command"] = self.destroy_img
+		self.btn_class_covered.pack(side="left", padx=2, pady=2)
+
 		btn_frame.pack(side="bottom",fill="both")
 
 	def append_img(self):
@@ -66,6 +71,8 @@ class Application(tk.Frame):
 		label.config(height=200, width=200,image=photo)
 		label.image = photo # keep a reference!
 		label.pack(side="left")
+
+		self.append_img()
 
 class ImageDataset(object):
 	"""docstring for ImageDataset"""
