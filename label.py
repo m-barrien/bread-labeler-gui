@@ -22,6 +22,7 @@ class Application(tk.Frame):
 		[self.append_img() for i in range(5)]
 		self.destroy_img()
 
+
 	def create_widgets(self):
 		img_frame = tk.Frame(self,width=630, height=200, bg="white", colormap="new")
 		img_frame.pack(side="top",fill="both")
@@ -72,7 +73,9 @@ class Application(tk.Frame):
 
 		label.config(height=200, width=200,image=photo)
 		label.image = photo # keep a reference!
+		label.bind("<Key>", classify_shortcut)
 		label.pack(side="left")
+		label.focus_set()
 
 		self.append_img()
 
@@ -127,7 +130,24 @@ class ImageDataset(object):
 		filename = full_path.split('/')[-1]
 		rename(full_path, self.out_path + "unknown/" + filename)
 
+
+def classify_shortcut(event):
+	keystroke=repr(event.char)
+	print (keystroke)
+	if 'a' in keystroke:
+		app.classify_empty()
+	elif 's' in keystroke:
+		app.classify_full()
+	elif 'd' in keystroke:
+		app.classify_covered()
+	elif 'f' in keystroke:
+		app.classify_unknown()
+
 imgManager=ImageDataset()
 root = tk.Tk()
 app = Application(master=root)
+
+app.bind("<1>", lambda event: app.focus_set())
+app.bind("<Key>", classify_shortcut)
+
 app.mainloop()
