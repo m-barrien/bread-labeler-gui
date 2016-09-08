@@ -8,27 +8,61 @@ class Application(tk.Frame):
 	def __init__(self, master=None):
 		super().__init__(master)
 		"""Fixed window size"""
-		master.minsize(width=600, height=600)
-		master.maxsize(width=600, height=600)
-		self.pack()
+		master.minsize(width=600, height=300)
+		master.maxsize(width=600, height=300)
+		self.img_list=[]
+		self.pack(fill="both")
 		self.create_widgets()
 
+		[self.append_img() for i in range(5)]
+
 	def create_widgets(self):
-		self.hi_there = tk.Button(self)
-		self.hi_there["text"] = "Hello World\n(click me)"
-		self.hi_there["command"] = self.say_hi
-		self.hi_there.pack(side="top")
+		self.img_frame = tk.Frame(self,width=600, height=200, bg="white", colormap="new")
+		self.img_frame.pack(side="top",fill="both")
 
-		self.quit = tk.Button(self, text="QUIT", fg="red",
-			command=root.destroy)
-		self.quit.pack(side="bottom")
+		btn_frame = tk.Frame(self,width=600, height=100, bg="white", colormap="new")
 
-	def say_hi(self):
-		image=imgManager.get_img()
+		self.btn_class_empty = tk.Button(btn_frame, width=10)
+		self.btn_class_empty["text"] = "Empty"
+		self.btn_class_empty["command"] = self.append_img
+		self.btn_class_empty.pack(side="left", padx=2, pady=2)
+
+		self.btn_class_full = tk.Button(btn_frame, width=10)
+		self.btn_class_full["text"] = "Full"
+		self.btn_class_full["command"] = self.append_img
+		self.btn_class_full.pack(side="left", padx=2, pady=2)
+
+		self.btn_class_covered = tk.Button(btn_frame, width=10)
+		self.btn_class_covered["text"] = "Covered"
+		self.btn_class_covered["command"] = self.destroy_img
+		self.btn_class_covered.pack(side="left", padx=2, pady=2)
+
+		btn_frame.pack(side="bottom",fill="both")
+
+	def append_img(self):
+		image,img_path = imgManager.get_img()
 		photo = ImageTk.PhotoImage(image)
-		label = tk.Label(image=photo)
+		label = tk.Label(self.img_frame,image=photo)
 		label.image = photo # keep a reference!
+		label.pack(side="left")
+
+		self.img_list.append((label,img_path))
+
+	def destroy_img(self):
+		#destroy old img label in display
+		label,img_path = self.img_list.pop(0)
+		label.pack_forget()
+		#resize second place img to first place
+		label,img_path = self.img_list[0]
+		image = imgManager.get_img_path(img_path,200)
+		photo = ImageTk.PhotoImage(image)
+		
+		label.config(height=200, width=200)
+		label.image=photo
+		
 		label.pack()
+
+
 
 class ImageDataset(object):
 	"""docstring for ImageDataset"""
@@ -41,8 +75,12 @@ class ImageDataset(object):
 		print ("%d Images found " % (len(self.files)))
 
 	def get_img(self, qty=1):
-		img= Image.open(self.in_path + self.files.pop(0))
-		print(img)
+		full_path=self.in_path + self.files.pop(0)
+		img= Image.open(full_path)
+		return (img,full_path)
+	def get_img_path(self, full_path, size=200):
+		img= Image.open(full_path)
+		img= img.resize((size, size), Image.ANTIALIAS)
 		return img
 			
 imgManager=ImageDataset()
