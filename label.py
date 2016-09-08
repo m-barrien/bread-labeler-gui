@@ -31,7 +31,7 @@ class Application(tk.Frame):
 
 		self.btn_class_empty = tk.Button(btn_frame, width=17, height=8)
 		self.btn_class_empty["text"] = "Empty"
-		self.btn_class_empty["command"] = self.append_img
+		self.btn_class_empty["command"] = self.classify_empty
 		self.btn_class_empty.pack(side="left", padx=2, pady=2)
 
 		self.btn_class_full = tk.Button(btn_frame, width=17, height=8)
@@ -41,12 +41,12 @@ class Application(tk.Frame):
 
 		self.btn_class_covered = tk.Button(btn_frame, width=17, height=8)
 		self.btn_class_covered["text"] = "Covered"
-		self.btn_class_covered["command"] = self.destroy_img
+		self.btn_class_covered["command"] = self.classify_covered
 		self.btn_class_covered.pack(side="left", padx=2, pady=2)
 
 		self.btn_class_covered = tk.Button(btn_frame, width=17, height=8)
 		self.btn_class_covered["text"] = "???"
-		self.btn_class_covered["command"] = self.destroy_img
+		self.btn_class_covered["command"] = self.classify_unknown
 		self.btn_class_covered.pack(side="left", padx=2, pady=2)
 
 		btn_frame.pack(side="bottom",fill="both")
@@ -79,6 +79,21 @@ class Application(tk.Frame):
 	def classify_full(self):
 		label,img_path = self.img_list[0]
 		imgManager.classify_full(img_path)
+		self.destroy_img()
+
+	def classify_empty(self):
+		label,img_path = self.img_list[0]
+		imgManager.classify_empty(img_path)
+		self.destroy_img()
+
+	def classify_covered(self):
+		label,img_path = self.img_list[0]
+		imgManager.classify_covered(img_path)
+		self.destroy_img()
+
+	def classify_unknown(self):
+		label,img_path = self.img_list[0]
+		imgManager.classify_unknown(img_path)
 		self.destroy_img()
 
 class ImageDataset(object):
