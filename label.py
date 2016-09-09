@@ -31,22 +31,22 @@ class Application(tk.Frame):
 		btn_frame = tk.Frame(self,width=630, height=100, bg="white", colormap="new")
 
 		self.btn_class_empty = tk.Button(btn_frame, width=17, height=8)
-		self.btn_class_empty["text"] = "Empty"
+		self.btn_class_empty["text"] = "Falta pan"
 		self.btn_class_empty["command"] = self.classify_empty
 		self.btn_class_empty.pack(side="left", padx=2, pady=2)
 
 		self.btn_class_full = tk.Button(btn_frame, width=17, height=8)
-		self.btn_class_full["text"] = "Full"
+		self.btn_class_full["text"] = "Todo pan"
 		self.btn_class_full["command"] = self.classify_full
 		self.btn_class_full.pack(side="left", padx=2, pady=2)
 
 		self.btn_class_covered = tk.Button(btn_frame, width=17, height=8)
-		self.btn_class_covered["text"] = "Covered"
+		self.btn_class_covered["text"] = "Muy cubierto"
 		self.btn_class_covered["command"] = self.classify_covered
 		self.btn_class_covered.pack(side="left", padx=2, pady=2)
 
 		self.btn_class_covered = tk.Button(btn_frame, width=17, height=8)
-		self.btn_class_covered["text"] = "???"
+		self.btn_class_covered["text"] = "???\nGente etc"
 		self.btn_class_covered["command"] = self.classify_unknown
 		self.btn_class_covered.pack(side="left", padx=2, pady=2)
 
@@ -133,15 +133,18 @@ class ImageDataset(object):
 
 def classify_shortcut(event):
 	keystroke=repr(event.char)
-	print (keystroke)
 	if 'a' in keystroke:
 		app.classify_empty()
+		print("empty")
 	elif 's' in keystroke:
 		app.classify_full()
+		print("full")
 	elif 'd' in keystroke:
 		app.classify_covered()
+		print("covered")
 	elif 'f' in keystroke:
 		app.classify_unknown()
+		print("unknown")
 
 imgManager=ImageDataset()
 root = tk.Tk()
